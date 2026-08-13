@@ -1,0 +1,3 @@
+-- Schema for the X26 PRMS. Filled in during build-order Phase 3
+-- (see plan_claude.md §11.3): CREATE TABLE + CHECK constraints + indexes
+-- for crew_leads, passengers, resources, usage_log, membership_change.

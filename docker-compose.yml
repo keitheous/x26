@@ -1,0 +1,30 @@
+services:
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootpass}
+      MYSQL_DATABASE: ${DB_NAME:-x26}
+      MYSQL_USER: ${DB_USER:-x26}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-x26pass}
+    ports:
+      - '${DB_PORT:-3306}:3306'
+    volumes:
+      - ./db/ddl.sql:/docker-entrypoint-initdb.d/ddl.sql:ro
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'mysqladmin',
+          'ping',
+          '-h',
+          'localhost',
+          '-uroot',
+          '-p${DB_ROOT_PASSWORD:-rootpass}',
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  mysql-data:

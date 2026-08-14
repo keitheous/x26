@@ -26,6 +26,22 @@ export class ConflictError extends AppError {
   }
 }
 
+export class UnauthorizedError extends AppError {
+  readonly status = 401;
+
+  constructor(message: string, code = 'UNAUTHORIZED') {
+    super(message, code);
+  }
+}
+
+export class ForbiddenError extends AppError {
+  readonly status = 403;
+
+  constructor(message: string, code = 'FORBIDDEN') {
+    super(message, code);
+  }
+}
+
 export class ValidationError extends AppError {
   readonly status = 400;
 

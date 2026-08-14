@@ -4,6 +4,14 @@ _PK: Primary Key_
 _UK: Unique Key_
 _FK: Foreign Key_
 
+ERD:
+
+- A CrewLead creates a Passenger
+- A CrewLead provisions a Resource
+- A CrewLead authorises a Membership Change
+- A Usage Log is created for auditing purpose when a Passenger uses a Resource
+- A Membership Change is created when a CrewLead updates a Passenger's membership
+
 ### CREW_LEAD
 | Field| Type | Note |
 | :--- | :--- | :--- |

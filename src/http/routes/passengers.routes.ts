@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { ForbiddenError, ValidationError } from '../../domain/errors';
 import { Role } from '../../domain/membership';
+import type { AccessService } from '../../services/access.service';
 import type { MembershipService } from '../../services/membership.service';
 import type { PassengerService } from '../../services/passenger.service';
 import type { ResourceService } from '../../services/resource.service';
@@ -9,11 +10,13 @@ import { requireRole } from '../middleware/require-role';
 import { validateBody } from '../middleware/validate';
 import { createPassengerSchema, type CreatePassengerBody } from '../schemas/passengers.schema';
 import { updateMembershipSchema, type UpdateMembershipBody } from '../schemas/membership.schema';
+import { createUsageSchema, type CreateUsageBody } from '../schemas/usage.schema';
 
 export function createPassengersRouter(deps: {
   passengerService: PassengerService;
   resourceService: ResourceService;
   membershipService: MembershipService;
+  accessService: AccessService;
   resolvePrincipal: PrincipalResolver;
 }): Router {
   const router = Router();
@@ -74,6 +77,29 @@ export function createPassengersRouter(deps: {
       const body = req.body as UpdateMembershipBody;
       const passenger = await deps.membershipService.updateMembership(id, body.membershipLevel, req.principal!.id);
       res.status(200).json(passenger);
+    },
+  );
+
+  router.post(
+    '/:id/usage',
+    requireAuth,
+    requireRole(Role.PASSENGER),
+    validateBody(createUsageSchema),
+    async (req, res) => {
+      const id = Number(req.params.id);
+      if (!Number.isInteger(id)) {
+        throw new ValidationError('Invalid passenger id');
+      }
+      if (req.principal!.id !== id) {
+        throw new ForbiddenError('Passengers may only use resources on their own behalf');
+      }
+      const body = req.body as CreateUsageBody;
+      await deps.accessService.validateUsage({
+        passengerId: id,
+        passengerLevel: req.principal!.membershipLevel!,
+        resourceId: body.resourceId,
+      });
+      res.status(201).send();
     },
   );
 

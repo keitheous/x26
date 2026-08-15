@@ -8,7 +8,9 @@
     { "key": "baseUrl", "value": "http://localhost:8000", "type": "string", "description": "Base URL for the local dev server" },
     { "key": "crewLeadApiKey", "value": "", "type": "string", "description": "Paste a plaintext key from the server boot-time stdout output" },
     { "key": "passengerId", "value": "", "type": "string", "description": "Auto-captured by the Create Passenger request" },
-    { "key": "passengerApiKey", "value": "", "type": "string", "description": "Auto-captured by the Create Passenger request" }
+    { "key": "passengerApiKey", "value": "", "type": "string", "description": "Auto-captured by the Create Passenger request" },
+    { "key": "sleepingPodResourceId", "value": "", "type": "string", "description": "Auto-captured by the Provision Sleeping Pod request" },
+    { "key": "luxuryO2PodResourceId", "value": "", "type": "string", "description": "Auto-captured by the Provision Luxury O2 Pod request" }
   ],
   "item": [
     {
@@ -132,6 +134,18 @@
       "item": [
         {
           "name": "Provision Sleeping Pod (SILVER)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('sleepingPodResourceId', pm.response.json().id);",
+                  "pm.test('201 Created', () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -149,6 +163,18 @@
         },
         {
           "name": "Provision Luxury O2 Pod (PLATINUM)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('luxuryO2PodResourceId', pm.response.json().id);",
+                  "pm.test('201 Created', () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -180,6 +206,50 @@
               "path": ["passengers", "{{passengerId}}", "resources"]
             },
             "description": "As a GOLD passenger, expect the Sleeping Pod (SILVER minimum) to show up here but not the Luxury O2 Pod (PLATINUM minimum)."
+          },
+          "response": []
+        },
+        {
+          "name": "Use Sleeping Pod (should be granted)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{passengerApiKey}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceId\": {{sleepingPodResourceId}}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/passengers/{{passengerId}}/usage",
+              "host": ["{{baseUrl}}"],
+              "path": ["passengers", "{{passengerId}}", "usage"]
+            },
+            "description": "GOLD meets the SILVER minimum, so expect 201 Created, and a GRANTED row written to usage_log."
+          },
+          "response": []
+        },
+        {
+          "name": "Use Luxury O2 Pod (should be denied at GOLD)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{passengerApiKey}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceId\": {{luxuryO2PodResourceId}}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/passengers/{{passengerId}}/usage",
+              "host": ["{{baseUrl}}"],
+              "path": ["passengers", "{{passengerId}}", "usage"]
+            },
+            "description": "GOLD doesn't meet the PLATINUM minimum, so expect 403 Forbidden — but still a DENIED row written to usage_log with a denial reason (the audit trail records denials too). Run 'Upgrade Passenger to PLATINUM' and retry this request afterward — it should now return 201."
           },
           "response": []
         }

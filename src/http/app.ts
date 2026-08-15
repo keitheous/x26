@@ -1,6 +1,7 @@
 import express, { type Express } from 'express';
 import helmet from 'helmet';
 import type { PrincipalResolver } from './middleware/authenticate';
+import type { AccessService } from '../services/access.service';
 import type { MembershipService } from '../services/membership.service';
 import type { PassengerService } from '../services/passenger.service';
 import type { ResourceService } from '../services/resource.service';
@@ -14,6 +15,7 @@ export function createApp(deps: {
   passengerService: PassengerService;
   resourceService: ResourceService;
   membershipService: MembershipService;
+  accessService: AccessService;
   resolvePrincipal: PrincipalResolver;
 }): Express {
   const app = express();

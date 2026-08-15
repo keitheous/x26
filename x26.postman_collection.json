@@ -1,0 +1,145 @@
+{
+  "info": {
+    "name": "Spaceship X26 — Passenger Resource Management System",
+    "description": "Manual walkthrough of the API built so far: health check, passenger CRUD, resource provisioning, and tier-filtered resource discovery.\n\nSetup:\n1. `docker compose up -d`\n2. `npm run dev` — on a fresh DB this prints 3 crew-lead API keys to stdout, exactly once\n3. Paste one of those keys into the `crewLeadApiKey` collection variable below\n4. Run 'Create Passenger' first — it auto-captures `passengerId` and `passengerApiKey` for the rest of the requests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8000", "type": "string", "description": "Base URL for the local dev server" },
+    { "key": "crewLeadApiKey", "value": "", "type": "string", "description": "Paste a plaintext key from the server boot-time stdout output" },
+    { "key": "passengerId", "value": "", "type": "string", "description": "Auto-captured by the Create Passenger request" },
+    { "key": "passengerApiKey", "value": "", "type": "string", "description": "Auto-captured by the Create Passenger request" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/health", "host": ["{{baseUrl}}"], "path": ["health"] }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Crew Lead — Passengers",
+      "item": [
+        {
+          "name": "Create Passenger",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "pm.collectionVariables.set('passengerId', body.id);",
+                  "pm.collectionVariables.set('passengerApiKey', body.apiKey);",
+                  "pm.test('201 Created', () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{crewLeadApiKey}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Wick\",\n  \"membershipLevel\": \"GOLD\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/passengers", "host": ["{{baseUrl}}"], "path": ["passengers"] }
+          },
+          "response": []
+        },
+        {
+          "name": "List Passengers",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{crewLeadApiKey}}" }],
+            "url": { "raw": "{{baseUrl}}/passengers", "host": ["{{baseUrl}}"], "path": ["passengers"] }
+          },
+          "response": []
+        },
+        {
+          "name": "Deactivate Passenger",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{crewLeadApiKey}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/passengers/{{passengerId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["passengers", "{{passengerId}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Crew Lead — Resources",
+      "item": [
+        {
+          "name": "Provision Sleeping Pod (SILVER)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{crewLeadApiKey}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Sleeping Pod A1\",\n  \"category\": \"SLEEPING_POD\",\n  \"minimumLevel\": \"SILVER\",\n  \"capacity\": 4\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/resources", "host": ["{{baseUrl}}"], "path": ["resources"] }
+          },
+          "response": []
+        },
+        {
+          "name": "Provision Luxury O2 Pod (PLATINUM)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{crewLeadApiKey}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Luxury O2 Pods\",\n  \"category\": \"OXYGEN_UNIT\",\n  \"minimumLevel\": \"PLATINUM\",\n  \"capacity\": 2\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/resources", "host": ["{{baseUrl}}"], "path": ["resources"] }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Passenger Self-Service",
+      "item": [
+        {
+          "name": "View My Accessible Resources",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{passengerApiKey}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/passengers/{{passengerId}}/resources",
+              "host": ["{{baseUrl}}"],
+              "path": ["passengers", "{{passengerId}}", "resources"]
+            },
+            "description": "As a GOLD passenger, expect the Sleeping Pod (SILVER minimum) to show up here but not the Luxury O2 Pod (PLATINUM minimum)."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

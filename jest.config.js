@@ -9,7 +9,11 @@ module.exports = {
     {
       ...base,
       displayName: 'unit',
-      testMatch: ['<rootDir>/tests/domain/**/*.test.ts', '<rootDir>/tests/services/**/*.test.ts'],
+      testMatch: [
+        '<rootDir>/tests/domain/**/*.test.ts',
+        '<rootDir>/tests/services/**/*.test.ts',
+        '<rootDir>/tests/http/**/*.test.ts',
+      ],
     },
     {
       ...base,

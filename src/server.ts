@@ -15,6 +15,7 @@ async function main(): Promise<void> {
   const passengerRepository = createMysqlPassengerRepository(pool);
   const resourceRepository = createMysqlResourceRepository(pool);
   const resolvePrincipal = createAuthService({ crewLeadRepository, passengerRepository });
+
   const passengerService = createPassengerService(passengerRepository);
   const resourceService = createResourceService(resourceRepository);
 

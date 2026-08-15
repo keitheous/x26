@@ -57,6 +57,19 @@ export interface Resource {
   createdAt: Date;
 }
 
+export interface NewResource {
+  name: string;
+  category: ResourceCategory;
+  minimumLevel: MembershipLevel;
+  capacity: number;
+  provisionedByCrewLeadId: number;
+}
+
+export interface ResourceRepository {
+  create(input: NewResource): Promise<Resource>;
+  listActive(): Promise<Resource[]>;
+}
+
 export type UsageOutcome = 'GRANTED' | 'DENIED';
 
 export interface UsageLog {

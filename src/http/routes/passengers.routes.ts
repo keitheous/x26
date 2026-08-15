@@ -1,7 +1,8 @@
 import { Router } from 'express';
-import { ValidationError } from '../../domain/errors';
+import { ForbiddenError, ValidationError } from '../../domain/errors';
 import { Role } from '../../domain/membership';
 import type { PassengerService } from '../../services/passenger.service';
+import type { ResourceService } from '../../services/resource.service';
 import { authenticate, type PrincipalResolver } from '../middleware/authenticate';
 import { requireRole } from '../middleware/require-role';
 import { validateBody } from '../middleware/validate';
@@ -9,6 +10,7 @@ import { createPassengerSchema, type CreatePassengerBody } from '../schemas/pass
 
 export function createPassengersRouter(deps: {
   passengerService: PassengerService;
+  resourceService: ResourceService;
   resolvePrincipal: PrincipalResolver;
 }): Router {
   const router = Router();
@@ -42,6 +44,18 @@ export function createPassengersRouter(deps: {
     }
     await deps.passengerService.deactivatePassenger(id);
     res.status(204).send();
+  });
+
+  router.get('/:id/resources', requireAuth, requireRole(Role.PASSENGER), async (req, res) => {
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id)) {
+      throw new ValidationError('Invalid passenger id');
+    }
+    if (req.principal!.id !== id) {
+      throw new ForbiddenError('Passengers may only view their own accessible resources');
+    }
+    const resources = await deps.resourceService.listAccessibleResources(req.principal!.membershipLevel!);
+    res.status(200).json(resources);
   });
 
   return router;

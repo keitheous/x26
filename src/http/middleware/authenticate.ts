@@ -12,6 +12,7 @@ export interface Principal {
 export type PrincipalResolver = (apiKeyHash: string) => Promise<Principal | null>;
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Request {
       principal?: Principal;

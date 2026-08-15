@@ -18,7 +18,6 @@ function toPassenger(row: PassengerRow): Passenger {
     name: row.name,
     membershipLevel: MembershipLevel[row.membership_level],
     status: row.status,
-    apiKeyHash: row.api_key_hash,
     createdByCrewLeadId: row.created_by_crew_lead_id,
     createdAt: row.created_at,
   };
@@ -37,7 +36,6 @@ export function createMysqlPassengerRepository(pool: Pool): PassengerRepository 
         name: input.name,
         membershipLevel: input.membershipLevel,
         status: 'ACTIVE',
-        apiKeyHash: input.apiKeyHash,
         createdByCrewLeadId: input.createdByCrewLeadId,
         createdAt: new Date(),
       };

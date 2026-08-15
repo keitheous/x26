@@ -4,7 +4,6 @@ import { ResourceCategory } from '../domain/resource-category';
 export interface CrewLead {
   id: number;
   name: string;
-  apiKeyHash: string;
   slot: number;
   createdAt: Date;
 }
@@ -26,7 +25,6 @@ export interface Passenger {
   name: string;
   membershipLevel: MembershipLevel;
   status: PassengerStatus;
-  apiKeyHash: string;
   createdByCrewLeadId: number;
   createdAt: Date;
 }

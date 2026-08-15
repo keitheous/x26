@@ -14,7 +14,6 @@ function toCrewLead(row: CrewLeadRow): CrewLead {
   return {
     id: row.id,
     name: row.name,
-    apiKeyHash: row.api_key_hash,
     slot: row.slot,
     createdAt: row.created_at,
   };
@@ -49,7 +48,6 @@ export function createMysqlCrewLeadRepository(pool: Pool): CrewLeadRepository {
         return {
           id: result.insertId,
           name: input.name,
-          apiKeyHash: input.apiKeyHash,
           slot,
           createdAt: new Date(),
         };

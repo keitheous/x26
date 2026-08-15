@@ -252,6 +252,20 @@
             "description": "GOLD doesn't meet the PLATINUM minimum, so expect 403 Forbidden — but still a DENIED row written to usage_log with a denial reason (the audit trail records denials too). Run 'Upgrade Passenger to PLATINUM' and retry this request afterward — it should now return 201."
           },
           "response": []
+        },
+        {
+          "name": "View My Usage History",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{passengerApiKey}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/passengers/{{passengerId}}/usage",
+              "host": ["{{baseUrl}}"],
+              "path": ["passengers", "{{passengerId}}", "usage"]
+            },
+            "description": "Run this after the two usage attempts above. Expect both entries back, most recent first: a GRANTED row for the Sleeping Pod and a DENIED row (with denial reason) for the Luxury O2 Pod — the audit trail includes denials, not just successes."
+          },
+          "response": []
         }
       ]
     }

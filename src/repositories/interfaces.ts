@@ -16,10 +16,6 @@ export interface NewCrewLead {
 
 export interface CrewLeadRepository {
   findByApiKeyHash(apiKeyHash: string): Promise<CrewLead | null>;
-  /**
-   * Counts and inserts inside a single transaction (`SELECT ... FOR UPDATE`) so two
-   * concurrent calls at the fourth slot can't both observe count < 3 — see plan_claude.md §5.
-   */
   createWithNextSlot(input: NewCrewLead): Promise<CrewLead>;
 }
 
@@ -33,6 +29,19 @@ export interface Passenger {
   apiKeyHash: string;
   createdByCrewLeadId: number;
   createdAt: Date;
+}
+
+export interface NewPassenger {
+  name: string;
+  membershipLevel: MembershipLevel;
+  apiKeyHash: string;
+  createdByCrewLeadId: number;
+}
+
+export interface PassengerRepository {
+  create(input: NewPassenger): Promise<Passenger>;
+  findById(id: number): Promise<Passenger | null>;
+  list(): Promise<Passenger[]>;
 }
 
 export type ResourceStatus = 'ACTIVE' | 'DECOMMISSIONED';

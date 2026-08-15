@@ -41,6 +41,7 @@ export interface PassengerRepository {
   findById(id: number): Promise<Passenger | null>;
   findByApiKeyHash(apiKeyHash: string): Promise<Passenger | null>;
   list(): Promise<Passenger[]>;
+  deactivate(id: number): Promise<void>;
 }
 
 export type ResourceStatus = 'ACTIVE' | 'DECOMMISSIONED';

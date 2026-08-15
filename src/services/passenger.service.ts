@@ -1,4 +1,5 @@
 import { generateApiKey, hashApiKey } from '../domain/api-key';
+import { NotFoundError } from '../domain/errors';
 import type { MembershipLevel } from '../domain/membership';
 import type { Passenger, PassengerRepository } from '../repositories/interfaces';
 
@@ -28,6 +29,14 @@ export function createPassengerService(passengerRepository: PassengerRepository)
 
     async listPassengers(): Promise<Passenger[]> {
       return passengerRepository.list();
+    },
+
+    async deactivatePassenger(id: number): Promise<void> {
+      const passenger = await passengerRepository.findById(id);
+      if (!passenger) {
+        throw new NotFoundError('Passenger not found');
+      }
+      await passengerRepository.deactivate(id);
     },
   };
 }

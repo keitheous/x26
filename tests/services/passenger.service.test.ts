@@ -1,4 +1,5 @@
 import { createPassengerService } from '../../src/services/passenger.service';
+import { NotFoundError } from '../../src/domain/errors';
 import { MembershipLevel } from '../../src/domain/membership';
 import { hashApiKey } from '../../src/domain/api-key';
 import type { Passenger, PassengerRepository } from '../../src/repositories/interfaces';
@@ -18,6 +19,7 @@ describe('Passenger Service', () => {
       findById: jest.fn(),
       findByApiKeyHash: jest.fn(),
       list: jest.fn(),
+      deactivate: jest.fn(),
     };
     const service = createPassengerService(passengerRepository);
 
@@ -52,9 +54,47 @@ describe('Passenger Service', () => {
       findById: jest.fn(),
       findByApiKeyHash: jest.fn(),
       list: jest.fn().mockResolvedValue(passengers),
+      deactivate: jest.fn(),
     };
     const service = createPassengerService(passengerRepository);
 
     await expect(service.listPassengers()).resolves.toBe(passengers);
+  });
+
+  it('deactivates a passenger that exists', async () => {
+    const existingPassenger: Passenger = {
+      id: 1,
+      name: 'John Wick',
+      membershipLevel: MembershipLevel.SILVER,
+      status: 'ACTIVE',
+      createdByCrewLeadId: 1,
+      createdAt: new Date('2026-01-01T00:00:00Z'),
+    };
+    const passengerRepository: PassengerRepository = {
+      create: jest.fn(),
+      findById: jest.fn().mockResolvedValue(existingPassenger),
+      findByApiKeyHash: jest.fn(),
+      list: jest.fn(),
+      deactivate: jest.fn(),
+    };
+    const service = createPassengerService(passengerRepository);
+
+    await service.deactivatePassenger(1);
+
+    expect(passengerRepository.deactivate).toHaveBeenCalledWith(1);
+  });
+
+  it('throws NotFoundError when deactivating a passenger that does not exist', async () => {
+    const passengerRepository: PassengerRepository = {
+      create: jest.fn(),
+      findById: jest.fn().mockResolvedValue(null),
+      findByApiKeyHash: jest.fn(),
+      list: jest.fn(),
+      deactivate: jest.fn(),
+    };
+    const service = createPassengerService(passengerRepository);
+
+    await expect(service.deactivatePassenger(999)).rejects.toThrow(NotFoundError);
+    expect(passengerRepository.deactivate).not.toHaveBeenCalled();
   });
 });

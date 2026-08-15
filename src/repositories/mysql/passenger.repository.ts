@@ -57,5 +57,9 @@ export function createMysqlPassengerRepository(pool: Pool): PassengerRepository 
       const [rows] = await pool.execute<PassengerRow[]>('SELECT * FROM passengers ORDER BY id');
       return rows.map(toPassenger);
     },
+
+    async deactivate(id) {
+      await pool.execute("UPDATE passengers SET status = 'INACTIVE' WHERE id = ?", [id]);
+    },
   };
 }

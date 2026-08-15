@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { ValidationError } from '../../domain/errors';
 import { Role } from '../../domain/membership';
 import type { PassengerService } from '../../services/passenger.service';
 import { authenticate, type PrincipalResolver } from '../middleware/authenticate';
@@ -32,6 +33,15 @@ export function createPassengersRouter(deps: {
   router.get('/', requireAuth, async (_req, res) => {
     const passengers = await deps.passengerService.listPassengers();
     res.status(200).json(passengers);
+  });
+
+  router.delete('/:id', requireAuth, requireRole(Role.CREW_LEAD), async (req, res) => {
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id)) {
+      throw new ValidationError('Invalid passenger id');
+    }
+    await deps.passengerService.deactivatePassenger(id);
+    res.status(204).send();
   });
 
   return router;

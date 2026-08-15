@@ -9,6 +9,20 @@ export interface CrewLead {
   createdAt: Date;
 }
 
+export interface NewCrewLead {
+  name: string;
+  apiKeyHash: string;
+}
+
+export interface CrewLeadRepository {
+  findByApiKeyHash(apiKeyHash: string): Promise<CrewLead | null>;
+  /**
+   * Counts and inserts inside a single transaction (`SELECT ... FOR UPDATE`) so two
+   * concurrent calls at the fourth slot can't both observe count < 3 — see plan_claude.md §5.
+   */
+  createWithNextSlot(input: NewCrewLead): Promise<CrewLead>;
+}
+
 export type PassengerStatus = 'ACTIVE' | 'INACTIVE';
 
 export interface Passenger {

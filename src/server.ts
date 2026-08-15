@@ -1,9 +1,17 @@
 import { createApp } from './http/app';
 import { env } from './config/env';
 import { logger } from './config/logger';
+import { pool } from './config/db';
+import { createMysqlCrewLeadRepository } from './repositories/mysql/crew-lead.repository';
+import { seedCrewLeads } from './bootstrap';
 
-const app = createApp();
+async function main(): Promise<void> {
+  await seedCrewLeads(createMysqlCrewLeadRepository(pool));
 
-app.listen(env.PORT, () => {
-  logger.info(`Server listening on port ${env.PORT}`);
-});
+  const app = createApp();
+  app.listen(env.PORT, () => {
+    logger.info(`Server listening on port ${env.PORT}`);
+  });
+}
+
+main();

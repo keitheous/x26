@@ -4,6 +4,7 @@ import { Role } from '../../domain/membership';
 import type { AccessService } from '../../services/access.service';
 import type { MembershipService } from '../../services/membership.service';
 import type { PassengerService } from '../../services/passenger.service';
+import type { ReportingService } from '../../services/reporting.service';
 import type { ResourceService } from '../../services/resource.service';
 import { authenticate, type PrincipalResolver } from '../middleware/authenticate';
 import { requireRole } from '../middleware/require-role';
@@ -17,6 +18,7 @@ export function createPassengersRouter(deps: {
   resourceService: ResourceService;
   membershipService: MembershipService;
   accessService: AccessService;
+  reportingService: ReportingService;
   resolvePrincipal: PrincipalResolver;
 }): Router {
   const router = Router();
@@ -102,6 +104,18 @@ export function createPassengersRouter(deps: {
       res.status(201).send();
     },
   );
+
+  router.get('/:id/usage', requireAuth, requireRole(Role.PASSENGER), async (req, res) => {
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id)) {
+      throw new ValidationError('Invalid passenger id');
+    }
+    if (req.principal!.id !== id) {
+      throw new ForbiddenError('Passengers may only view their own usage history');
+    }
+    const history = await deps.reportingService.getPersonalHistory(id);
+    res.status(200).json(history);
+  });
 
   return router;
 }

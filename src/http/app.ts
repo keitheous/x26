@@ -4,6 +4,7 @@ import type { PrincipalResolver } from './middleware/authenticate';
 import type { AccessService } from '../services/access.service';
 import type { MembershipService } from '../services/membership.service';
 import type { PassengerService } from '../services/passenger.service';
+import type { ReportingService } from '../services/reporting.service';
 import type { ResourceService } from '../services/resource.service';
 import { requestLogger } from './middleware/request-logger';
 import { errorHandler, notFoundHandler } from './middleware/error-handler';
@@ -16,6 +17,7 @@ export function createApp(deps: {
   resourceService: ResourceService;
   membershipService: MembershipService;
   accessService: AccessService;
+  reportingService: ReportingService;
   resolvePrincipal: PrincipalResolver;
 }): Express {
   const app = express();

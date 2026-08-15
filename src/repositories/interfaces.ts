@@ -96,6 +96,7 @@ export interface NewUsageLog {
 
 export interface UsageLogRepository {
   create(input: NewUsageLog): Promise<UsageLog>;
+  findByPassenger(passengerId: number, limit: number): Promise<UsageLog[]>;
 }
 
 export interface MembershipChange {

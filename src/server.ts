@@ -12,6 +12,7 @@ import { createPassengerService } from './services/passenger.service';
 import { createResourceService } from './services/resource.service';
 import { createMembershipService } from './services/membership.service';
 import { createAccessService } from './services/access.service';
+import { createReportingService } from './services/reporting.service';
 import { seedCrewLeads } from './bootstrap';
 
 async function main(): Promise<void> {
@@ -26,10 +27,18 @@ async function main(): Promise<void> {
   const resourceService = createResourceService(resourceRepository);
   const membershipService = createMembershipService({ passengerRepository, membershipChangeRepository });
   const accessService = createAccessService({ resourceRepository, usageLogRepository });
+  const reportingService = createReportingService(usageLogRepository);
 
   await seedCrewLeads(crewLeadRepository);
 
-  const app = createApp({ passengerService, resourceService, membershipService, accessService, resolvePrincipal });
+  const app = createApp({
+    passengerService,
+    resourceService,
+    membershipService,
+    accessService,
+    reportingService,
+    resolvePrincipal,
+  });
   app.listen(env.PORT, () => {
     logger.info(`Server listening on port ${env.PORT}`);
   });

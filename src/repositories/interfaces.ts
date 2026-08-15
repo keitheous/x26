@@ -68,6 +68,7 @@ export interface NewResource {
 
 export interface ResourceRepository {
   create(input: NewResource): Promise<Resource>;
+  findById(id: number): Promise<Resource | null>;
   listActive(): Promise<Resource[]>;
 }
 
@@ -82,6 +83,19 @@ export interface UsageLog {
   outcome: UsageOutcome;
   denialReason: string | null;
   occurredAt: Date;
+}
+
+export interface NewUsageLog {
+  passengerId: number;
+  resourceId: number;
+  passengerLevelAtUse: MembershipLevel;
+  resourceMinLevelAtUse: MembershipLevel;
+  outcome: UsageOutcome;
+  denialReason: string | null;
+}
+
+export interface UsageLogRepository {
+  create(input: NewUsageLog): Promise<UsageLog>;
 }
 
 export interface MembershipChange {

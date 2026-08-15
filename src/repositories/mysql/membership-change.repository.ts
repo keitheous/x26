@@ -1,23 +1,28 @@
-import type { RowDataPacket } from 'mysql2/promise';
+import type { Pool, ResultSetHeader } from 'mysql2/promise';
 import { MembershipLevel } from '../../domain/membership';
-import type { MembershipChange } from '../interfaces';
+import type { MembershipChangeRepository, NewMembershipChange } from '../interfaces';
 
-interface MembershipChangeRow extends RowDataPacket {
-  id: number;
-  passenger_id: number;
-  from_level: keyof typeof MembershipLevel;
-  to_level: keyof typeof MembershipLevel;
-  changed_by_crew_lead_id: number;
-  changed_at: Date;
-}
-
-export function toMembershipChange(row: MembershipChangeRow): MembershipChange {
+export function createMysqlMembershipChangeRepository(pool: Pool): MembershipChangeRepository {
   return {
-    id: row.id,
-    passengerId: row.passenger_id,
-    fromLevel: MembershipLevel[row.from_level],
-    toLevel: MembershipLevel[row.to_level],
-    changedByCrewLeadId: row.changed_by_crew_lead_id,
-    changedAt: row.changed_at,
+    async create(input: NewMembershipChange) {
+      const [result] = await pool.execute<ResultSetHeader>(
+        `INSERT INTO membership_changes (passenger_id, from_level, to_level, changed_by_crew_lead_id)
+         VALUES (?, ?, ?, ?)`,
+        [
+          input.passengerId,
+          MembershipLevel[input.fromLevel],
+          MembershipLevel[input.toLevel],
+          input.changedByCrewLeadId,
+        ],
+      );
+      return {
+        id: result.insertId,
+        passengerId: input.passengerId,
+        fromLevel: input.fromLevel,
+        toLevel: input.toLevel,
+        changedByCrewLeadId: input.changedByCrewLeadId,
+        changedAt: new Date(),
+      };
+    },
   };
 }

@@ -61,5 +61,9 @@ export function createMysqlPassengerRepository(pool: Pool): PassengerRepository 
     async deactivate(id) {
       await pool.execute("UPDATE passengers SET status = 'INACTIVE' WHERE id = ?", [id]);
     },
+
+    async updateMembershipLevel(id, level) {
+      await pool.execute('UPDATE passengers SET membership_level = ? WHERE id = ?', [MembershipLevel[level], id]);
+    },
   };
 }

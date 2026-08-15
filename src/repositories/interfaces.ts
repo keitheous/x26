@@ -42,6 +42,7 @@ export interface PassengerRepository {
   findByApiKeyHash(apiKeyHash: string): Promise<Passenger | null>;
   list(): Promise<Passenger[]>;
   deactivate(id: number): Promise<void>;
+  updateMembershipLevel(id: number, level: MembershipLevel): Promise<void>;
 }
 
 export type ResourceStatus = 'ACTIVE' | 'DECOMMISSIONED';
@@ -90,4 +91,15 @@ export interface MembershipChange {
   toLevel: MembershipLevel;
   changedByCrewLeadId: number;
   changedAt: Date;
+}
+
+export interface NewMembershipChange {
+  passengerId: number;
+  fromLevel: MembershipLevel;
+  toLevel: MembershipLevel;
+  changedByCrewLeadId: number;
+}
+
+export interface MembershipChangeRepository {
+  create(input: NewMembershipChange): Promise<MembershipChange>;
 }

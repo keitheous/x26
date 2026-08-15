@@ -69,6 +69,50 @@
           "response": []
         },
         {
+          "name": "Upgrade Passenger to PLATINUM",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{crewLeadApiKey}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"membershipLevel\": \"PLATINUM\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/passengers/{{passengerId}}/membership",
+              "host": ["{{baseUrl}}"],
+              "path": ["passengers", "{{passengerId}}", "membership"]
+            },
+            "description": "Writes a membership_change audit row (fromLevel GOLD -> toLevel PLATINUM). Re-run 'View My Accessible Resources' afterward as the passenger — the Luxury O2 Pod should now show up too."
+          },
+          "response": []
+        },
+        {
+          "name": "Downgrade Passenger to SILVER",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{crewLeadApiKey}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"membershipLevel\": \"SILVER\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/passengers/{{passengerId}}/membership",
+              "host": ["{{baseUrl}}"],
+              "path": ["passengers", "{{passengerId}}", "membership"]
+            },
+            "description": "Run this after the upgrade above to see the reverse: another membership_change row is written (fromLevel PLATINUM -> toLevel SILVER), and re-running 'View My Accessible Resources' should show the Luxury O2 Pod disappearing again."
+          },
+          "response": []
+        },
+        {
           "name": "Deactivate Passenger",
           "request": {
             "method": "DELETE",

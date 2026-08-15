@@ -1,16 +1,19 @@
 import { Router } from 'express';
 import { ForbiddenError, ValidationError } from '../../domain/errors';
 import { Role } from '../../domain/membership';
+import type { MembershipService } from '../../services/membership.service';
 import type { PassengerService } from '../../services/passenger.service';
 import type { ResourceService } from '../../services/resource.service';
 import { authenticate, type PrincipalResolver } from '../middleware/authenticate';
 import { requireRole } from '../middleware/require-role';
 import { validateBody } from '../middleware/validate';
 import { createPassengerSchema, type CreatePassengerBody } from '../schemas/passengers.schema';
+import { updateMembershipSchema, type UpdateMembershipBody } from '../schemas/membership.schema';
 
 export function createPassengersRouter(deps: {
   passengerService: PassengerService;
   resourceService: ResourceService;
+  membershipService: MembershipService;
   resolvePrincipal: PrincipalResolver;
 }): Router {
   const router = Router();
@@ -57,6 +60,22 @@ export function createPassengersRouter(deps: {
     const resources = await deps.resourceService.listAccessibleResources(req.principal!.membershipLevel!);
     res.status(200).json(resources);
   });
+
+  router.patch(
+    '/:id/membership',
+    requireAuth,
+    requireRole(Role.CREW_LEAD),
+    validateBody(updateMembershipSchema),
+    async (req, res) => {
+      const id = Number(req.params.id);
+      if (!Number.isInteger(id)) {
+        throw new ValidationError('Invalid passenger id');
+      }
+      const body = req.body as UpdateMembershipBody;
+      const passenger = await deps.membershipService.updateMembership(id, body.membershipLevel, req.principal!.id);
+      res.status(200).json(passenger);
+    },
+  );
 
   return router;
 }

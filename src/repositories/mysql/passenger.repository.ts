@@ -48,6 +48,13 @@ export function createMysqlPassengerRepository(pool: Pool): PassengerRepository 
       return rows[0] ? toPassenger(rows[0]) : null;
     },
 
+    async findByApiKeyHash(apiKeyHash) {
+      const [rows] = await pool.execute<PassengerRow[]>('SELECT * FROM passengers WHERE api_key_hash = ?', [
+        apiKeyHash,
+      ]);
+      return rows[0] ? toPassenger(rows[0]) : null;
+    },
+
     async list() {
       const [rows] = await pool.execute<PassengerRow[]>('SELECT * FROM passengers ORDER BY id');
       return rows.map(toPassenger);

@@ -41,6 +41,7 @@ export interface NewPassenger {
 export interface PassengerRepository {
   create(input: NewPassenger): Promise<Passenger>;
   findById(id: number): Promise<Passenger | null>;
+  findByApiKeyHash(apiKeyHash: string): Promise<Passenger | null>;
   list(): Promise<Passenger[]>;
 }
 

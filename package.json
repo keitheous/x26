@@ -13,6 +13,7 @@
     "start": "node --env-file=.env dist/server.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "jest --selectProjects unit",

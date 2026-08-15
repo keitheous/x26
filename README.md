@@ -54,18 +54,19 @@ npm run build   # tsc -p tsconfig.json -> dist/
 npm start       # node --env-file=.env dist/server.js
 ```
 
-## Tests / Linting
+## Tests / Linting / Type-checking
 
 Running unit test without DB
 ```
 npm test
 ```
 
-Lint the codebase
+Lint and Typecheck the codebase
 ```
 npm run lint
-```
 
+npm run typecheck
+```
 
 **Crew Leads are seeded automatically at boot, not via a separate command.** The first time the
 server starts against an empty `crew_leads` table, it creates the 3 Crew Leads and prints their

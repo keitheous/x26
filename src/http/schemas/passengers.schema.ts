@@ -1,9 +1,5 @@
 import { z } from 'zod';
-import { MembershipLevel } from '../../domain/membership';
-
-const membershipLevelSchema = z
-  .enum(['SILVER', 'GOLD', 'PLATINUM'])
-  .transform((level) => MembershipLevel[level]);
+import { membershipLevelSchema } from './membership-level.schema';
 
 export const createPassengerSchema = z.object({
   name: z.string().min(1),

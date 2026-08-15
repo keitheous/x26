@@ -15,6 +15,7 @@ describe('Auth Services', () => {
       findByApiKeyHash: jest.fn(),
       list: jest.fn(),
       deactivate: jest.fn(),
+      updateMembershipLevel: jest.fn(),
     };
     const resolvePrincipal = createAuthService({ crewLeadRepository, passengerRepository });
 
@@ -41,6 +42,7 @@ describe('Auth Services', () => {
       findByApiKeyHash: jest.fn().mockResolvedValue(passenger),
       list: jest.fn(),
       deactivate: jest.fn(),
+      updateMembershipLevel: jest.fn(),
     };
     const resolvePrincipal = createAuthService({ crewLeadRepository, passengerRepository });
 
@@ -62,6 +64,7 @@ describe('Auth Services', () => {
       findByApiKeyHash: jest.fn().mockResolvedValue(null),
       list: jest.fn(),
       deactivate: jest.fn(),
+      updateMembershipLevel: jest.fn(),
     };
     const resolvePrincipal = createAuthService({ crewLeadRepository, passengerRepository });
 

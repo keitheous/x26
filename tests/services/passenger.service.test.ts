@@ -20,6 +20,7 @@ describe('Passenger Service', () => {
       findByApiKeyHash: jest.fn(),
       list: jest.fn(),
       deactivate: jest.fn(),
+      updateMembershipLevel: jest.fn(),
     };
     const service = createPassengerService(passengerRepository);
 
@@ -55,6 +56,7 @@ describe('Passenger Service', () => {
       findByApiKeyHash: jest.fn(),
       list: jest.fn().mockResolvedValue(passengers),
       deactivate: jest.fn(),
+      updateMembershipLevel: jest.fn(),
     };
     const service = createPassengerService(passengerRepository);
 
@@ -76,6 +78,7 @@ describe('Passenger Service', () => {
       findByApiKeyHash: jest.fn(),
       list: jest.fn(),
       deactivate: jest.fn(),
+      updateMembershipLevel: jest.fn(),
     };
     const service = createPassengerService(passengerRepository);
 
@@ -91,6 +94,7 @@ describe('Passenger Service', () => {
       findByApiKeyHash: jest.fn(),
       list: jest.fn(),
       deactivate: jest.fn(),
+      updateMembershipLevel: jest.fn(),
     };
     const service = createPassengerService(passengerRepository);
 

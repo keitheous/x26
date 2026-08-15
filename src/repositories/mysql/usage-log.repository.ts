@@ -1,6 +1,20 @@
 import type { Pool, ResultSetHeader, RowDataPacket } from 'mysql2/promise';
 import { MembershipLevel } from '../../domain/membership';
-import type { NewUsageLog, UsageLog, UsageLogRepository } from '../interfaces';
+import type { NewUsageLog, UsageByLevel, UsageLog, UsageLogRepository } from '../interfaces';
+
+interface UsageByLevelRow extends RowDataPacket {
+  passenger_level_at_use: keyof typeof MembershipLevel;
+  granted: number | string;
+  denied: number | string;
+}
+
+function toUsageByLevel(row: UsageByLevelRow): UsageByLevel {
+  return {
+    level: MembershipLevel[row.passenger_level_at_use],
+    granted: Number(row.granted),
+    denied: Number(row.denied),
+  };
+}
 
 interface UsageLogRow extends RowDataPacket {
   id: number;
@@ -60,6 +74,18 @@ export function createMysqlUsageLogRepository(pool: Pool): UsageLogRepository {
         [passengerId, limit],
       );
       return rows.map(toUsageLog);
+    },
+
+    async aggregateByLevel() {
+      const [rows] = await pool.execute<UsageByLevelRow[]>(
+        `SELECT
+           passenger_level_at_use,
+           SUM(outcome = 'GRANTED') AS granted,
+           SUM(outcome = 'DENIED') AS denied
+         FROM usage_log
+         GROUP BY passenger_level_at_use`,
+      );
+      return rows.map(toUsageByLevel);
     },
   };
 }

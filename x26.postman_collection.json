@@ -193,6 +193,25 @@
       ]
     },
     {
+      "name": "Crew Lead — Reports",
+      "item": [
+        {
+          "name": "View Usage by Level",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{crewLeadApiKey}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/reports/usage-by-level",
+              "host": ["{{baseUrl}}"],
+              "path": ["reports", "usage-by-level"]
+            },
+            "description": "Run this after the two usage attempts under Passenger Self-Service. Expect one row per membership level that has usage_log activity, each with a granted/denied count — e.g. GOLD should show granted: 1, denied: 1."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
       "name": "Passenger Self-Service",
       "item": [
         {

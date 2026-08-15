@@ -30,7 +30,11 @@ describe('Access Service', () => {
       findById: jest.fn().mockResolvedValue(resource),
       listActive: jest.fn(),
     };
-    const usageLogRepository: UsageLogRepository = { create: jest.fn(), findByPassenger: jest.fn() };
+    const usageLogRepository: UsageLogRepository = {
+      create: jest.fn(),
+      findByPassenger: jest.fn(),
+      aggregateByLevel: jest.fn(),
+    };
     const service = createAccessService({ resourceRepository, usageLogRepository });
 
     await service.validateUsage({
@@ -56,7 +60,11 @@ describe('Access Service', () => {
       findById: jest.fn().mockResolvedValue(resource),
       listActive: jest.fn(),
     };
-    const usageLogRepository: UsageLogRepository = { create: jest.fn(), findByPassenger: jest.fn() };
+    const usageLogRepository: UsageLogRepository = {
+      create: jest.fn(),
+      findByPassenger: jest.fn(),
+      aggregateByLevel: jest.fn(),
+    };
     const service = createAccessService({ resourceRepository, usageLogRepository });
 
     await expect(
@@ -87,7 +95,11 @@ describe('Access Service', () => {
       findById: jest.fn().mockResolvedValue(resource),
       listActive: jest.fn(),
     };
-    const usageLogRepository: UsageLogRepository = { create: jest.fn(), findByPassenger: jest.fn() };
+    const usageLogRepository: UsageLogRepository = {
+      create: jest.fn(),
+      findByPassenger: jest.fn(),
+      aggregateByLevel: jest.fn(),
+    };
     const service = createAccessService({ resourceRepository, usageLogRepository });
 
     await expect(
@@ -114,7 +126,11 @@ describe('Access Service', () => {
       findById: jest.fn().mockResolvedValue(null),
       listActive: jest.fn(),
     };
-    const usageLogRepository: UsageLogRepository = { create: jest.fn(), findByPassenger: jest.fn() };
+    const usageLogRepository: UsageLogRepository = {
+      create: jest.fn(),
+      findByPassenger: jest.fn(),
+      aggregateByLevel: jest.fn(),
+    };
     const service = createAccessService({ resourceRepository, usageLogRepository });
 
     await expect(

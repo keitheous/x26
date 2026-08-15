@@ -94,9 +94,16 @@ export interface NewUsageLog {
   denialReason: string | null;
 }
 
+export interface UsageByLevel {
+  level: MembershipLevel;
+  granted: number;
+  denied: number;
+}
+
 export interface UsageLogRepository {
   create(input: NewUsageLog): Promise<UsageLog>;
   findByPassenger(passengerId: number, limit: number): Promise<UsageLog[]>;
+  aggregateByLevel(): Promise<UsageByLevel[]>;
 }
 
 export interface MembershipChange {

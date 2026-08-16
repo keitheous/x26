@@ -2,9 +2,9 @@
 
 Spaceship X26 — Passenger Resource Management System. Backend-only REST API (Node.js + TypeScript, MySQL, no UI).
 
-## 1. Scope:
+## Scope
 
-Objectives:
+**Objectives:**
 1. Build a backend REST API (Node.js + TypeScript, MySQL) for the spaceship's passenger and
    resource management system — a layered `routes → services → repositories` architecture, no UI.
 2. Get the important rules right: tier access is a simple rank check, only three Crew Leads can
@@ -14,7 +14,12 @@ Objectives:
    ahead of a real second use, and every service/middleware unit tested so the system stays
    easy to change with confidence.
 
-Out of Scope:
+**Core Design:**
+- Each membership level is just a number behind the scenes: Silver = 1, Gold = 2, Platinum = 3. Each resource also has a minimum level needed to use it. To check "can this passenger use this resource?", the code does one simple thing: is the passenger's number ≥ the resource's minimum number?
+  - If yes, they are granted access. That single check is why higher tiers automatically get everything lower tiers get — there's no separate list of "what Gold can access" to maintain by hand.
+- This is covered end-to-end by `tests/domain/membership.test.ts`, which asserts the full 3×3 SILVER/GOLD/PLATINUM × resource-level truth table.
+
+**Out of Scope:**
 - Rate limiting / API Pagination - Dropped in the interest of time. Originally planned for `express-rate-limit` to be implemented.
 - Logging Library — plain `console` + `JSON.stringify` instead, in the interest of time
 - User Interface — backend API only, in the interest of time
@@ -26,11 +31,11 @@ Out of Scope:
 - Fixed caps, not configurable: resource demand only shows the top 10, personal usage history only shows the last 100. No way to ask for more right now — another feature request for the backlog.
 - No live/real-time analytics — the reports must be requested on demand - calling the endpoint to get the current numbers. The customer can request for another feature, we can sell them a live dashboard with a poll and subscription system for updates.
 
-Gaps:
+**Gaps:**
 - Integration tests are incomplete. `tests/integration/usage.test.ts` covers the grant path, deny path, and ownership enforcement, but the crew-lead concurrency test and the two report aggregation tests have not yet been implemented.
   - I appreciate that integration tests are extremely important as they are the only way to prove real database behavior instead of a mock — but each needs real setup against a live MySQL, and they're expensive to write properly. I ran out of time before getting to them.
 
-## 2. User Stories
+## User Stories
 
 System Requirements:
 - The system has three Crew Leads
@@ -58,7 +63,7 @@ Usage Analytics & Reporting requirements:
 - A passenger can view thier own usage history
   - Endpoint: `GET /passengers/:id/usage`
 
-## 3. REST API
+## REST API
 
 **Passengers**
 
@@ -94,7 +99,7 @@ only the *write* input types (`NewPassenger`, `NewCrewLead`) do. All numeric fie
 (`MembershipLevel`) serialize as their raw enum number (`SILVER=1, GOLD=2, PLATINUM=3`) in every
 response, even though request bodies accept the string name (`"GOLD"`).
 
-## 4. Data model
+## Data model
 
 ```
   CREW_LEAD {
@@ -160,7 +165,7 @@ Notes:
 - Usage Logs are a snapshot of levels at write time rather than joining live rows, so a later tier or resource change can never rewrites history.
 - Usage Log has indexes for each report: by passenger, by resource, and by tier.
 
-## 5. Folder structure
+## Folder structure
 
 ```
 src/
@@ -194,7 +199,7 @@ README.md
 APPROACH.md
 ```
 
-## 6. Dependencies
+## Dependencies
 
 | Package | Purpose |
 | --- | --- |
@@ -207,3 +212,4 @@ APPROACH.md
 | `supertest`, `@types/supertest` | drives the integration suite (`tests/integration/usage.test.ts`) against the real app over HTTP |
 | `eslint`, `typescript-eslint`, `eslint-config-prettier`, `@eslint/js`, `globals` | linting, scoped to `**/*.ts` only |
 | `prettier` | formatting; deliberately excludes `*.md` via `.prettierignore` |
+

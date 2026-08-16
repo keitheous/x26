@@ -1,8 +1,10 @@
 # Spaceship X26 — Passenger Resource Management System
 
-This README covers running the app locally. For the architecture, REST API reference, data
-model, and known gaps, see [approach.md](approach.md).
+This README covers running the app locally.
 
+For the architecture, REST API reference, data model, and known gaps, see [APPROACH.md](APPROACH.md).
+
+For the reuirements, see [REQUIREMENTS](REQUIREMENTS.md)
 ## Prerequisites
 
 - **Node.js 22** (pinned via [.nvmrc](.nvmrc)) —

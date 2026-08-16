@@ -17,15 +17,12 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "jest --selectProjects unit",
-    "test:integration": "jest --selectProjects integration --runInBand"
+    "test:integration": "node --env-file=.env node_modules/.bin/jest --selectProjects integration --runInBand"
   },
   "dependencies": {
     "express": "^5.0.1",
-    "express-rate-limit": "^7.4.1",
     "helmet": "^8.0.0",
     "mysql2": "^3.11.5",
-    "pino": "^9.5.0",
-    "pino-http": "^10.3.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {

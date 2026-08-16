@@ -29,6 +29,7 @@ describe('Access Service', () => {
       create: jest.fn(),
       findById: jest.fn().mockResolvedValue(resource),
       listActive: jest.fn(),
+      decommission: jest.fn(),
     };
     const usageLogRepository: UsageLogRepository = {
       create: jest.fn(),
@@ -60,6 +61,7 @@ describe('Access Service', () => {
       create: jest.fn(),
       findById: jest.fn().mockResolvedValue(resource),
       listActive: jest.fn(),
+      decommission: jest.fn(),
     };
     const usageLogRepository: UsageLogRepository = {
       create: jest.fn(),
@@ -96,6 +98,7 @@ describe('Access Service', () => {
       create: jest.fn(),
       findById: jest.fn().mockResolvedValue(resource),
       listActive: jest.fn(),
+      decommission: jest.fn(),
     };
     const usageLogRepository: UsageLogRepository = {
       create: jest.fn(),
@@ -128,6 +131,7 @@ describe('Access Service', () => {
       create: jest.fn(),
       findById: jest.fn().mockResolvedValue(null),
       listActive: jest.fn(),
+      decommission: jest.fn(),
     };
     const usageLogRepository: UsageLogRepository = {
       create: jest.fn(),

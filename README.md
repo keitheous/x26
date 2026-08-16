@@ -105,4 +105,5 @@ To Import collection, variables and query params:
 3. Collection → **Variables** tab → paste it into `crewLeadApiKey`'s Current Value → save.
 4. Run the requests top to bottom. "Create Passenger" auto-captures `passengerId`/`passengerApiKey`
    into the collection variables via a test script — nothing else to copy by hand.
+  - See [assets/](assets/) for a step-by-step guide: [How to get API key from bootstrap.png](assets/How%20to%20get%20API%20key%20from%20bootstrap.png) and [How to import variables.mov](assets/How%20to%20import%20variables.mov)
 

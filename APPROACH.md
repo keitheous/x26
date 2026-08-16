@@ -41,8 +41,8 @@ Crew Leads requirements:
   - Endpoints:  `POST /passengers`, `GET /passengers` and `DELETE /passengers/:id`
 - A Crew Lead can upgrade or downgrade a passenger's membershit level
   - Endpoint: `PATCH /passengers/:id/membership`
-- A Crew Lead can provision ship resources
-  - Endpoint: `POST /resources`
+- A Crew Lead can provision and decommission ship resources
+  - Endpoints: `POST /resources` and `DELETE /resources/:id`
 
 Passenger requirements:
 - A Passenger can discover resources available to their tier
@@ -57,8 +57,6 @@ Usage Analytics & Reporting requirements:
   - Endpoint: `GET /reports/resource-demand`
 - A passenger can view thier own usage history
   - Endpoint: `GET /passengers/:id/usage`
-
-<!-- NOTES KEITH: Just found out that crew needs to decomission a resource -->
 
 ## 3. REST API
 
@@ -79,6 +77,7 @@ Usage Analytics & Reporting requirements:
 | Method | Path | Auth | Request body | Success | Notes |
 | --- | --- | --- | --- | --- | --- |
 | POST | `/resources` | Crew Lead | `{ name, category, minimumLevel, capacity }` | `201` | |
+| DELETE | `/resources/:id` | Crew Lead | — | `204` | soft decommission |
 
 **Reports**
 

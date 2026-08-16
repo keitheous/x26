@@ -1,5 +1,8 @@
 # Spaceship X26 — Passenger Resource Management System
 
+This README covers running the app locally. For the architecture, REST API reference, data
+model, and known gaps, see [approach.md](approach.md).
+
 ## Prerequisites
 
 - **Node.js 22** (pinned via [.nvmrc](.nvmrc)) —
@@ -8,8 +11,6 @@
   - Check you're actually on it before running anything else: `node --version` should print `v22.x.x`.
 - **Docker Desktop** (Mac/Windows) or **Docker Engine + the Compose plugin** (Linux) — needs to support the `docker compose` command (Compose v2), not the older standalone `docker-compose` binary
 - **npm** for node package management.
-
-
 
 ## Database (local MySQL via Docker)
 
@@ -37,7 +38,7 @@ docker compose down    # to stop and remove the container
 **Resetting**
 
 ```
-docker compose down -v   # to deleet the data volume
+docker compose down -v   # to delete the data volume
 docker compose up -d     # to reapply db/ddl.sql from scratch
 ```
 
@@ -68,6 +69,11 @@ npm run lint
 npm run typecheck
 ```
 
+Integration tests (needs `docker compose up -d` running first — these hit a real MySQL, not a mock)
+```
+npm run test:integration
+```
+
 **Crew Leads are seeded automatically at boot, not via a separate command.** The first time the
 server starts against an empty `crew_leads` table, it creates the 3 Crew Leads and prints their
 plaintext API keys to stdout — this is the only time they're shown, since only the SHA-256 hash is
@@ -77,11 +83,16 @@ to re-run and no `npm run seed` step.
 ## Manual verification (Postman)
 
 [x26.postman_collection.json](x26.postman_collection.json) walks through the API end to end:
-  ->  health check
+  -> health check
   -> create a passenger as a Crew Lead
   -> list passengers
+  -> upgrade/downgrade that passenger's membership level
   -> provision two resources at different tiers
   -> view accessible resources as that passenger (tier-filtered)
+  -> use a resource (both a granted case and a denied case)
+  -> view that passenger's own usage history
+  -> view the usage-by-level and resource-demand reports as a Crew Lead
+  -> decommission a resource, then see usage of it denied regardless of tier
   -> deactivate a passenger
 
 To Import collection, variables and query params:

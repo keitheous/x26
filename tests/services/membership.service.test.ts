@@ -89,7 +89,9 @@ describe('Membership Service', () => {
     };
     const service = createMembershipService({ passengerRepository, membershipChangeRepository });
 
-    await expect(service.updateMembership(999, MembershipLevel.GOLD, 2)).rejects.toThrow(NotFoundError);
+    await expect(service.updateMembership(999, MembershipLevel.GOLD, 2)).rejects.toThrow(
+      NotFoundError,
+    );
     expect(passengerRepository.updateMembershipLevel).not.toHaveBeenCalled();
     expect(membershipChangeRepository.create).not.toHaveBeenCalled();
   });

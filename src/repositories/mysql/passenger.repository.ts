@@ -29,7 +29,12 @@ export function createMysqlPassengerRepository(pool: Pool): PassengerRepository 
       const [result] = await pool.execute<ResultSetHeader>(
         `INSERT INTO passengers (name, membership_level, api_key_hash, created_by_crew_lead_id)
          VALUES (?, ?, ?, ?)`,
-        [input.name, MembershipLevel[input.membershipLevel], input.apiKeyHash, input.createdByCrewLeadId],
+        [
+          input.name,
+          MembershipLevel[input.membershipLevel],
+          input.apiKeyHash,
+          input.createdByCrewLeadId,
+        ],
       );
       return {
         id: result.insertId,
@@ -42,14 +47,17 @@ export function createMysqlPassengerRepository(pool: Pool): PassengerRepository 
     },
 
     async findById(id) {
-      const [rows] = await pool.execute<PassengerRow[]>('SELECT * FROM passengers WHERE id = ?', [id]);
+      const [rows] = await pool.execute<PassengerRow[]>('SELECT * FROM passengers WHERE id = ?', [
+        id,
+      ]);
       return rows[0] ? toPassenger(rows[0]) : null;
     },
 
     async findByApiKeyHash(apiKeyHash) {
-      const [rows] = await pool.execute<PassengerRow[]>('SELECT * FROM passengers WHERE api_key_hash = ?', [
-        apiKeyHash,
-      ]);
+      const [rows] = await pool.execute<PassengerRow[]>(
+        'SELECT * FROM passengers WHERE api_key_hash = ?',
+        [apiKeyHash],
+      );
       return rows[0] ? toPassenger(rows[0]) : null;
     },
 
@@ -63,7 +71,10 @@ export function createMysqlPassengerRepository(pool: Pool): PassengerRepository 
     },
 
     async updateMembershipLevel(id, level) {
-      await pool.execute('UPDATE passengers SET membership_level = ? WHERE id = ?', [MembershipLevel[level], id]);
+      await pool.execute('UPDATE passengers SET membership_level = ? WHERE id = ?', [
+        MembershipLevel[level],
+        id,
+      ]);
     },
   };
 }

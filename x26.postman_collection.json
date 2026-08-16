@@ -5,12 +5,42 @@
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-    { "key": "baseUrl", "value": "http://localhost:8000", "type": "string", "description": "Base URL for the local dev server" },
-    { "key": "crewLeadApiKey", "value": "", "type": "string", "description": "Paste a plaintext key from the server boot-time stdout output" },
-    { "key": "passengerId", "value": "", "type": "string", "description": "Auto-captured by the Create Passenger request" },
-    { "key": "passengerApiKey", "value": "", "type": "string", "description": "Auto-captured by the Create Passenger request" },
-    { "key": "sleepingPodResourceId", "value": "", "type": "string", "description": "Auto-captured by the Provision Sleeping Pod request" },
-    { "key": "luxuryO2PodResourceId", "value": "", "type": "string", "description": "Auto-captured by the Provision Luxury O2 Pod request" }
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000",
+      "type": "string",
+      "description": "Base URL for the local dev server"
+    },
+    {
+      "key": "crewLeadApiKey",
+      "value": "",
+      "type": "string",
+      "description": "Paste a plaintext key from the server boot-time stdout output"
+    },
+    {
+      "key": "passengerId",
+      "value": "",
+      "type": "string",
+      "description": "Auto-captured by the Create Passenger request"
+    },
+    {
+      "key": "passengerApiKey",
+      "value": "",
+      "type": "string",
+      "description": "Auto-captured by the Create Passenger request"
+    },
+    {
+      "key": "sleepingPodResourceId",
+      "value": "",
+      "type": "string",
+      "description": "Auto-captured by the Provision Sleeping Pod request"
+    },
+    {
+      "key": "luxuryO2PodResourceId",
+      "value": "",
+      "type": "string",
+      "description": "Auto-captured by the Provision Luxury O2 Pod request"
+    }
   ],
   "item": [
     {
@@ -57,7 +87,11 @@
               "raw": "{\n  \"name\": \"John Wick\",\n  \"membershipLevel\": \"GOLD\"\n}",
               "options": { "raw": { "language": "json" } }
             },
-            "url": { "raw": "{{baseUrl}}/passengers", "host": ["{{baseUrl}}"], "path": ["passengers"] }
+            "url": {
+              "raw": "{{baseUrl}}/passengers",
+              "host": ["{{baseUrl}}"],
+              "path": ["passengers"]
+            }
           },
           "response": []
         },
@@ -66,7 +100,11 @@
           "request": {
             "method": "GET",
             "header": [{ "key": "Authorization", "value": "Bearer {{crewLeadApiKey}}" }],
-            "url": { "raw": "{{baseUrl}}/passengers", "host": ["{{baseUrl}}"], "path": ["passengers"] }
+            "url": {
+              "raw": "{{baseUrl}}/passengers",
+              "host": ["{{baseUrl}}"],
+              "path": ["passengers"]
+            }
           },
           "response": []
         },
@@ -157,7 +195,11 @@
               "raw": "{\n  \"name\": \"Sleeping Pod A1\",\n  \"category\": \"SLEEPING_POD\",\n  \"minimumLevel\": \"SILVER\",\n  \"capacity\": 4\n}",
               "options": { "raw": { "language": "json" } }
             },
-            "url": { "raw": "{{baseUrl}}/resources", "host": ["{{baseUrl}}"], "path": ["resources"] }
+            "url": {
+              "raw": "{{baseUrl}}/resources",
+              "host": ["{{baseUrl}}"],
+              "path": ["resources"]
+            }
           },
           "response": []
         },
@@ -186,7 +228,11 @@
               "raw": "{\n  \"name\": \"Luxury O2 Pods\",\n  \"category\": \"OXYGEN_UNIT\",\n  \"minimumLevel\": \"PLATINUM\",\n  \"capacity\": 2\n}",
               "options": { "raw": { "language": "json" } }
             },
-            "url": { "raw": "{{baseUrl}}/resources", "host": ["{{baseUrl}}"], "path": ["resources"] }
+            "url": {
+              "raw": "{{baseUrl}}/resources",
+              "host": ["{{baseUrl}}"],
+              "path": ["resources"]
+            }
           },
           "response": []
         },

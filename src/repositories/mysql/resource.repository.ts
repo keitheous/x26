@@ -54,7 +54,9 @@ export function createMysqlResourceRepository(pool: Pool): ResourceRepository {
     },
 
     async findById(id) {
-      const [rows] = await pool.execute<ResourceRow[]>('SELECT * FROM resources WHERE id = ?', [id]);
+      const [rows] = await pool.execute<ResourceRow[]>('SELECT * FROM resources WHERE id = ?', [
+        id,
+      ]);
       return rows[0] ? toResource(rows[0]) : null;
     },
 

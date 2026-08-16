@@ -1,6 +1,12 @@
 import type { Pool, ResultSetHeader, RowDataPacket } from 'mysql2/promise';
 import { MembershipLevel } from '../../domain/membership';
-import type { NewUsageLog, ResourceDemand, UsageByLevel, UsageLog, UsageLogRepository } from '../interfaces';
+import type {
+  NewUsageLog,
+  ResourceDemand,
+  UsageByLevel,
+  UsageLog,
+  UsageLogRepository,
+} from '../interfaces';
 
 interface UsageByLevelRow extends RowDataPacket {
   passenger_level_at_use: keyof typeof MembershipLevel;

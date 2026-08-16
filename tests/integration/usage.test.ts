@@ -48,7 +48,7 @@ describe('Usage integration', () => {
     });
   });
 
-  afterAll(async () =>  await pool.end());
+  afterAll(async () => await pool.end());
 
   async function createPassenger(membershipLevel: MembershipLevel) {
     const response = await request(app)

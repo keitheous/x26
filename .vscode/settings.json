@@ -2,5 +2,5 @@
   "files.trimTrailingWhitespace": true,
   "editor.tabSize": 2,
   "files.insertFinalNewline": true,
-  "editor.insertSpaces": true,
+  "editor.insertSpaces": true
 }

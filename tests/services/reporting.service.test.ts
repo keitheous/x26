@@ -1,6 +1,11 @@
 import { createReportingService } from '../../src/services/reporting.service';
 import { MembershipLevel } from '../../src/domain/membership';
-import type { ResourceDemand, UsageByLevel, UsageLog, UsageLogRepository } from '../../src/repositories/interfaces';
+import type {
+  ResourceDemand,
+  UsageByLevel,
+  UsageLog,
+  UsageLogRepository,
+} from '../../src/repositories/interfaces';
 
 describe('Reporting Service', () => {
   it('fetches personal history for the given passenger with a fixed cap', async () => {

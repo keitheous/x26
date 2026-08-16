@@ -9,6 +9,9 @@ export enum Role {
   PASSENGER = 'PASSENGER',
 }
 
-export function canAccess(passengerLevel: MembershipLevel, resourceMinLevel: MembershipLevel): boolean {
+export function canAccess(
+  passengerLevel: MembershipLevel,
+  resourceMinLevel: MembershipLevel,
+): boolean {
   return passengerLevel >= resourceMinLevel;
 }

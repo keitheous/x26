@@ -1,10 +1,20 @@
 import { createAuthService } from '../../src/services/auth.service';
 import { Role, MembershipLevel } from '../../src/domain/membership';
-import type { CrewLead, CrewLeadRepository, Passenger, PassengerRepository } from '../../src/repositories/interfaces';
+import type {
+  CrewLead,
+  CrewLeadRepository,
+  Passenger,
+  PassengerRepository,
+} from '../../src/repositories/interfaces';
 
 describe('Auth Services', () => {
   it('checks crew leads before falling back to passengers', async () => {
-    const crewLead: CrewLead = { id: 1, name: 'Lead One', slot: 1, createdAt: new Date('2026-01-01T00:00:00Z') };
+    const crewLead: CrewLead = {
+      id: 1,
+      name: 'Lead One',
+      slot: 1,
+      createdAt: new Date('2026-01-01T00:00:00Z'),
+    };
     const crewLeadRepository: CrewLeadRepository = {
       findByApiKeyHash: jest.fn().mockResolvedValue(crewLead),
       createWithNextSlot: jest.fn(),

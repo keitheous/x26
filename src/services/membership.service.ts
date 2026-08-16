@@ -1,6 +1,10 @@
 import { NotFoundError } from '../domain/errors';
 import type { MembershipLevel } from '../domain/membership';
-import type { MembershipChangeRepository, Passenger, PassengerRepository } from '../repositories/interfaces';
+import type {
+  MembershipChangeRepository,
+  Passenger,
+  PassengerRepository,
+} from '../repositories/interfaces';
 
 export function createMembershipService(deps: {
   passengerRepository: PassengerRepository;

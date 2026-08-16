@@ -62,7 +62,9 @@ export function createPassengersRouter(deps: {
     if (req.principal!.id !== id) {
       throw new ForbiddenError('Passengers may only view their own accessible resources');
     }
-    const resources = await deps.resourceService.listAccessibleResources(req.principal!.membershipLevel!);
+    const resources = await deps.resourceService.listAccessibleResources(
+      req.principal!.membershipLevel!,
+    );
     res.status(200).json(resources);
   });
 
@@ -77,7 +79,11 @@ export function createPassengersRouter(deps: {
         throw new ValidationError('Invalid passenger id');
       }
       const body = req.body as UpdateMembershipBody;
-      const passenger = await deps.membershipService.updateMembership(id, body.membershipLevel, req.principal!.id);
+      const passenger = await deps.membershipService.updateMembership(
+        id,
+        body.membershipLevel,
+        req.principal!.id,
+      );
       res.status(200).json(passenger);
     },
   );

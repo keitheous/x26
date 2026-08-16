@@ -22,9 +22,10 @@ function toCrewLead(row: CrewLeadRow): CrewLead {
 export function createMysqlCrewLeadRepository(pool: Pool): CrewLeadRepository {
   return {
     async findByApiKeyHash(apiKeyHash) {
-      const [rows] = await pool.execute<CrewLeadRow[]>('SELECT * FROM crew_leads WHERE api_key_hash = ?', [
-        apiKeyHash,
-      ]);
+      const [rows] = await pool.execute<CrewLeadRow[]>(
+        'SELECT * FROM crew_leads WHERE api_key_hash = ?',
+        [apiKeyHash],
+      );
       return rows[0] ? toCrewLead(rows[0]) : null;
     },
 

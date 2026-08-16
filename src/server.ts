@@ -25,7 +25,10 @@ async function main(): Promise<void> {
 
   const passengerService = createPassengerService(passengerRepository);
   const resourceService = createResourceService(resourceRepository);
-  const membershipService = createMembershipService({ passengerRepository, membershipChangeRepository });
+  const membershipService = createMembershipService({
+    passengerRepository,
+    membershipChangeRepository,
+  });
   const accessService = createAccessService({ resourceRepository, usageLogRepository });
   const reportingService = createReportingService(usageLogRepository);
 

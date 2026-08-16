@@ -85,7 +85,7 @@ export function createMysqlUsageLogRepository(pool: Pool): UsageLogRepository {
     },
 
     async findByPassenger(passengerId, limit) {
-      const [rows] = await pool.execute<UsageLogRow[]>(
+      const [rows] = await pool.query<UsageLogRow[]>(
         'SELECT * FROM usage_log WHERE passenger_id = ? ORDER BY occurred_at DESC LIMIT ?',
         [passengerId, limit],
       );
@@ -105,7 +105,7 @@ export function createMysqlUsageLogRepository(pool: Pool): UsageLogRepository {
     },
 
     async aggregateResourceDemand(limit) {
-      const [rows] = await pool.execute<ResourceDemandRow[]>(
+      const [rows] = await pool.query<ResourceDemandRow[]>(
         `SELECT
            ul.resource_id,
            r.name AS resource_name,

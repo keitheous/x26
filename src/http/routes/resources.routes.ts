@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { ValidationError } from '../../domain/errors';
 import { Role } from '../../domain/membership';
 import type { ResourceService } from '../../services/resource.service';
 import { authenticate, type PrincipalResolver } from '../middleware/authenticate';
@@ -30,6 +31,15 @@ export function createResourcesRouter(deps: {
       res.status(201).json(resource);
     },
   );
+
+  router.delete('/:id', requireAuth, requireRole(Role.CREW_LEAD), async (req, res) => {
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id)) {
+      throw new ValidationError('Invalid resource id');
+    }
+    await deps.resourceService.decommissionResource(id);
+    res.status(204).send();
+  });
 
   return router;
 }

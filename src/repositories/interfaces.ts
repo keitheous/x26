@@ -70,6 +70,7 @@ export interface ResourceRepository {
   create(input: NewResource): Promise<Resource>;
   findById(id: number): Promise<Resource | null>;
   listActive(): Promise<Resource[]>;
+  decommission(id: number): Promise<void>;
 }
 
 export type UsageOutcome = 'GRANTED' | 'DENIED';

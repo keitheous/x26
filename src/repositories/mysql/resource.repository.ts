@@ -64,5 +64,9 @@ export function createMysqlResourceRepository(pool: Pool): ResourceRepository {
       );
       return rows.map(toResource);
     },
+
+    async decommission(id) {
+      await pool.execute("UPDATE resources SET status = 'DECOMMISSIONED' WHERE id = ?", [id]);
+    },
   };
 }

@@ -189,6 +189,20 @@
             "url": { "raw": "{{baseUrl}}/resources", "host": ["{{baseUrl}}"], "path": ["resources"] }
           },
           "response": []
+        },
+        {
+          "name": "Decommission Sleeping Pod",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{crewLeadApiKey}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/resources/{{sleepingPodResourceId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["resources", "{{sleepingPodResourceId}}"]
+            },
+            "description": "Expect 204. Run this after 'Use Sleeping Pod (should be granted)' under Passenger Self-Service, then re-run that same request afterward — it should now return 403 even though GOLD still meets the SILVER minimum, since a decommissioned resource denies usage regardless of tier."
+          },
+          "response": []
         }
       ]
     },

@@ -208,6 +208,20 @@
             "description": "Run this after the two usage attempts under Passenger Self-Service. Expect one row per membership level that has usage_log activity, each with a granted/denied count — e.g. GOLD should show granted: 1, denied: 1."
           },
           "response": []
+        },
+        {
+          "name": "View Resource Demand",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{crewLeadApiKey}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/reports/resource-demand",
+              "host": ["{{baseUrl}}"],
+              "path": ["reports", "resource-demand"]
+            },
+            "description": "Run this after the two usage attempts under Passenger Self-Service. Expect both resources ranked by attempts (most-demanded first), each with a granted count — e.g. the Sleeping Pod and Luxury O2 Pod should each show attempts: 1."
+          },
+          "response": []
         }
       ]
     },

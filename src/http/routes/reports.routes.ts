@@ -16,5 +16,10 @@ export function createReportsRouter(deps: {
     res.status(200).json(usageByLevel);
   });
 
+  router.get('/resource-demand', requireAuth, requireRole(Role.CREW_LEAD), async (_req, res) => {
+    const resourceDemand = await deps.reportingService.getResourceDemand();
+    res.status(200).json(resourceDemand);
+  });
+
   return router;
 }

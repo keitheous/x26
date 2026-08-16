@@ -100,10 +100,18 @@ export interface UsageByLevel {
   denied: number;
 }
 
+export interface ResourceDemand {
+  resourceId: number;
+  resourceName: string;
+  attempts: number;
+  granted: number;
+}
+
 export interface UsageLogRepository {
   create(input: NewUsageLog): Promise<UsageLog>;
   findByPassenger(passengerId: number, limit: number): Promise<UsageLog[]>;
   aggregateByLevel(): Promise<UsageByLevel[]>;
+  aggregateResourceDemand(limit: number): Promise<ResourceDemand[]>;
 }
 
 export interface MembershipChange {

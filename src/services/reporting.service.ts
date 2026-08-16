@@ -1,6 +1,7 @@
-import type { UsageByLevel, UsageLog, UsageLogRepository } from '../repositories/interfaces';
+import type { ResourceDemand, UsageByLevel, UsageLog, UsageLogRepository } from '../repositories/interfaces';
 
 const PERSONAL_HISTORY_LIMIT = 100;
+const RESOURCE_DEMAND_LIMIT = 10;
 
 export function createReportingService(usageLogRepository: UsageLogRepository) {
   return {
@@ -10,6 +11,10 @@ export function createReportingService(usageLogRepository: UsageLogRepository) {
 
     async getUsageByLevel(): Promise<UsageByLevel[]> {
       return usageLogRepository.aggregateByLevel();
+    },
+
+    async getResourceDemand(): Promise<ResourceDemand[]> {
+      return usageLogRepository.aggregateResourceDemand(RESOURCE_DEMAND_LIMIT);
     },
   };
 }

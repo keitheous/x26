@@ -1,6 +1,6 @@
 import type { Pool, ResultSetHeader, RowDataPacket } from 'mysql2/promise';
 import { MembershipLevel } from '../../domain/membership';
-import type { NewUsageLog, UsageByLevel, UsageLog, UsageLogRepository } from '../interfaces';
+import type { NewUsageLog, ResourceDemand, UsageByLevel, UsageLog, UsageLogRepository } from '../interfaces';
 
 interface UsageByLevelRow extends RowDataPacket {
   passenger_level_at_use: keyof typeof MembershipLevel;
@@ -13,6 +13,22 @@ function toUsageByLevel(row: UsageByLevelRow): UsageByLevel {
     level: MembershipLevel[row.passenger_level_at_use],
     granted: Number(row.granted),
     denied: Number(row.denied),
+  };
+}
+
+interface ResourceDemandRow extends RowDataPacket {
+  resource_id: number;
+  resource_name: string;
+  attempts: number | string;
+  granted: number | string;
+}
+
+function toResourceDemand(row: ResourceDemandRow): ResourceDemand {
+  return {
+    resourceId: row.resource_id,
+    resourceName: row.resource_name,
+    attempts: Number(row.attempts),
+    granted: Number(row.granted),
   };
 }
 
@@ -86,6 +102,23 @@ export function createMysqlUsageLogRepository(pool: Pool): UsageLogRepository {
          GROUP BY passenger_level_at_use`,
       );
       return rows.map(toUsageByLevel);
+    },
+
+    async aggregateResourceDemand(limit) {
+      const [rows] = await pool.execute<ResourceDemandRow[]>(
+        `SELECT
+           ul.resource_id,
+           r.name AS resource_name,
+           COUNT(*) AS attempts,
+           SUM(ul.outcome = 'GRANTED') AS granted
+         FROM usage_log ul
+         JOIN resources r ON r.id = ul.resource_id
+         GROUP BY ul.resource_id, r.name
+         ORDER BY attempts DESC
+         LIMIT ?`,
+        [limit],
+      );
+      return rows.map(toResourceDemand);
     },
   };
 }

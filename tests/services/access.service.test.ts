@@ -34,6 +34,7 @@ describe('Access Service', () => {
       create: jest.fn(),
       findByPassenger: jest.fn(),
       aggregateByLevel: jest.fn(),
+      aggregateResourceDemand: jest.fn(),
     };
     const service = createAccessService({ resourceRepository, usageLogRepository });
 
@@ -64,6 +65,7 @@ describe('Access Service', () => {
       create: jest.fn(),
       findByPassenger: jest.fn(),
       aggregateByLevel: jest.fn(),
+      aggregateResourceDemand: jest.fn(),
     };
     const service = createAccessService({ resourceRepository, usageLogRepository });
 
@@ -99,6 +101,7 @@ describe('Access Service', () => {
       create: jest.fn(),
       findByPassenger: jest.fn(),
       aggregateByLevel: jest.fn(),
+      aggregateResourceDemand: jest.fn(),
     };
     const service = createAccessService({ resourceRepository, usageLogRepository });
 
@@ -130,6 +133,7 @@ describe('Access Service', () => {
       create: jest.fn(),
       findByPassenger: jest.fn(),
       aggregateByLevel: jest.fn(),
+      aggregateResourceDemand: jest.fn(),
     };
     const service = createAccessService({ resourceRepository, usageLogRepository });
 

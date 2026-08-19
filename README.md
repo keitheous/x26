@@ -85,17 +85,17 @@ to re-run and no `npm run seed` step.
 ## Manual verification (Postman)
 
 [x26.postman_collection.json](x26.postman_collection.json) walks through the API end to end:
-  -> health check
-  -> create a passenger as a Crew Lead
-  -> list passengers
-  -> upgrade/downgrade that passenger's membership level
-  -> provision two resources at different tiers
-  -> view accessible resources as that passenger (tier-filtered)
-  -> use a resource (both a granted case and a denied case)
-  -> view that passenger's own usage history
-  -> view the usage-by-level and resource-demand reports as a Crew Lead
-  -> decommission a resource, then see usage of it denied regardless of tier
-  -> deactivate a passenger
+- health check
+- create a passenger as a Crew Lead
+- list passengers
+- upgrade/downgrade that passenger's membership level
+- provision two resources at different tiers
+- view accessible resources as that passenger (tier-filtered)
+- use a resource (both a granted case and a denied case)
+- view that passenger's own usage history
+- view the usage-by-level and resource-demand reports as a Crew Lead
+- decommission a resource, then see usage of it denied regardless of tier
+- deactivate a passenger
 
 To Import collection, variables and query params:
 
